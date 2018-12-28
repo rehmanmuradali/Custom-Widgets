@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/etPinView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pin View"
+        android:textStyle="bold"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:paddingTop="16dp"
+        />
+
+    <widgets.android.com.androidwidgets.pinview.PortablePinView
+        android:id="@+id/pinView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:m_digit="4"
+        app:m_text_size="15sp"
+        app:m_margin_between="15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etPinView"
+        android:paddingTop="16dp"
+        />
+
+
+
+</android.support.constraint.ConstraintLayout>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="PortablePinView">
+
+        <!--Digits of Pin-->
+        <attr name="m_digit" format="integer"/>
+
+        <!--Margin between digits in dps-->
+        <attr name="m_margin_between" format="integer"/>
+
+        <!--Text Size in Sps-->
+        <attr name="m_text_size" format="dimension"/>
+
+
+
+    </declare-styleable>
+
+</resources>
