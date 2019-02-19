@@ -171,6 +171,13 @@ public class PortablePinView extends LinearLayout {
         return pin.toString();
     }
 
+    /**
+     * Get Pin Digit
+     */
+    public int getPinLength()
+    {
+        return editTextList.size();
+    }
 
     /**
      * The functional interface will be trigger when user filled all the pins
