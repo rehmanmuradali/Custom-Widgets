@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.View;
 import android.widget.LinearLayout;
 
 import java.util.ArrayList;
@@ -69,7 +70,12 @@ public class PortablePinView extends LinearLayout {
     private void init() {
         // Linear Layout Properties
         setGravity(Gravity.CENTER);
-        setOnClickListener(view -> UiUtil.showKeyboard(this));
+        setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UiUtil.showKeyboard(PortablePinView.this);
+            }
+        });
         TextWatcher textWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
@@ -127,7 +133,7 @@ public class PortablePinView extends LinearLayout {
         filters[NUMBER_ZERO] = new InputFilter.LengthFilter(NUMBER_ONE);
 
         for (int i = NUMBER_ZERO; i < numberOfDigits; i++) {
-            PinViewEditText editText = new PinViewEditText(getContext(), R.drawable.verification_pin_drawable);
+            final PinViewEditText editText = new PinViewEditText(getContext(), R.drawable.verification_pin_drawable);
             editText.setEms(1);
             editText.setInputType(InputType.TYPE_CLASS_TEXT);
             editText.setFilters(filters);
@@ -136,17 +142,35 @@ public class PortablePinView extends LinearLayout {
             editText.setCursorVisible(false);
             editText.setLayoutParams(layoutParams);
             editText.addTextChangedListener(textWatcher);
-            Integer iObject = i;
-            editText.setOnFocusChangeListener((view, b) -> {
-                if (b) {
-                    currentFocusIndex = iObject;
+            final Integer iObject = i;
+            editText.setOnFocusChangeListener(new OnFocusChangeListener() {
+                @Override
+                public void onFocusChange(View view, boolean b) {
+                    if (b) {
+                        currentFocusIndex = iObject;
+                    }
+                    editText.setSelection(Objects.requireNonNull(editText.getText()).length());
                 }
-                editText.setSelection(Objects.requireNonNull(editText.getText()).length());
             });
             editTextList.add(editText);
             addView(editText);
         }
     }
+
+
+    /**
+     * Get Current content of Pin View
+     */
+    public String getText() {
+        StringBuilder pin = new StringBuilder();
+
+        for (PinViewEditText et : editTextList) {
+            pin.append(et.getText());
+        }
+
+        return pin.toString();
+    }
+
 
     /**
      * The functional interface will be trigger when user filled all the pins
