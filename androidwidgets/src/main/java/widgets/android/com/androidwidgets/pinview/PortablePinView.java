@@ -11,6 +11,7 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -91,11 +92,6 @@ public class PortablePinView extends LinearLayout {
                     editTextList.get(currentFocusIndex % editTextList.size()).requestFocus();
                 }
 
-                // For shifting backwards the focus of edit Text
-                if (charSequence.toString().length() == NUMBER_ZERO && currentFocusIndex > NUMBER_ZERO) {
-                    currentFocusIndex--;
-                    editTextList.get(currentFocusIndex % editTextList.size()).requestFocus();
-                }
 
                 //To check if code is completed or not
                 boolean isFinish = true;
@@ -125,6 +121,28 @@ public class PortablePinView extends LinearLayout {
                 // No need of this functionality
             }
         };
+        // For shifting focus backward of edit text
+        OnKeyListener onKeyListener = new OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int keyCode, KeyEvent keyEvent) {
+
+                if (keyEvent.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_DEL) {
+
+                    if (Objects.requireNonNull(editTextList.get(currentFocusIndex).getText()).length() == NUMBER_ZERO) {
+
+                        if (currentFocusIndex > NUMBER_ZERO) {
+                            currentFocusIndex--;
+                            editTextList.get(currentFocusIndex).setText("");
+                            editTextList.get(currentFocusIndex).requestFocus();
+                        }
+
+                    }
+                    return true;
+
+                }
+                return false;
+            }
+        };
 
         // Pin View Edit Text Properties
         LayoutParams layoutParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
@@ -133,6 +151,7 @@ public class PortablePinView extends LinearLayout {
         filters[NUMBER_ZERO] = new InputFilter.LengthFilter(NUMBER_ONE);
 
         for (int i = NUMBER_ZERO; i < numberOfDigits; i++) {
+
             final PinViewEditText editText = new PinViewEditText(getContext(), R.drawable.verification_pin_drawable);
             editText.setEms(1);
             editText.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -142,6 +161,7 @@ public class PortablePinView extends LinearLayout {
             editText.setCursorVisible(false);
             editText.setLayoutParams(layoutParams);
             editText.addTextChangedListener(textWatcher);
+            editText.setOnKeyListener(onKeyListener);
             final Integer iObject = i;
             editText.setOnFocusChangeListener(new OnFocusChangeListener() {
                 @Override
@@ -174,8 +194,7 @@ public class PortablePinView extends LinearLayout {
     /**
      * Get Pin Digit
      */
-    public int getPinLength()
-    {
+    public int getPinLength() {
         return editTextList.size();
     }
 
